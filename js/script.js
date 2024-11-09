@@ -49,19 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // Filtra y muestra las películas que coinciden con la búsqueda
-  btnBuscar.addEventListener("click", () => {
-    const searchText = inputBuscar.value.trim().toLowerCase();
-    if (searchText) {
-      const filteredMovies = moviesData.filter(movie => {
-        return movie.title.toLowerCase().includes(searchText) ||
-               movie.genres.some(genre => genre.toLowerCase().includes(searchText)) ||
-               (movie.tagline && movie.tagline.toLowerCase().includes(searchText)) ||
-               (movie.overview && movie.overview.toLowerCase().includes(searchText));
-      });
-      mostrarPeliculas(filteredMovies);
-    }
-  });
+// Filtra y muestra las películas que coinciden con la búsqueda
+btnBuscar.addEventListener("click", () => {
+  const searchText = inputBuscar.value.trim().toLowerCase();
+  if (searchText) {
+    const filteredMovies = moviesData.filter(movie => {
+      return (
+        movie.title.toLowerCase().includes(searchText) ||
+        (movie.genres && movie.genres.some(genre => genre.name.toLowerCase().includes(searchText))) ||
+        (movie.tagline && movie.tagline.toLowerCase().includes(searchText)) ||
+        (movie.overview && movie.overview.toLowerCase().includes(searchText))
+      );
+    });
+    mostrarPeliculas(filteredMovies);
+  }
+});
 
   // Función para mostrar los detalles de una película en el Offcanvas
   const mostrarDetalles = (pelicula) => {
