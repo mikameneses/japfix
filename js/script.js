@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   let moviesData = [];
 
-  // Carga los datos de la API
+  // Carga los datos de la API y habilita el botón de búsqueda
   fetch("https://japceibal.github.io/japflix_api/movies-data.json")
     .then(response => response.json())
-    .then(data => moviesData = data)
+    .then(data => {
+      moviesData = data;
+      console.log("Datos de películas cargados:", moviesData); // Verificación de datos
+    })
     .catch(error => console.error("Error al cargar los datos de la API:", error));
 
   const inputBuscar = document.getElementById("inputBuscar");
@@ -15,10 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const movieTitle = document.getElementById("movieTitle");
   const movieOverview = document.getElementById("movieOverview");
   const movieGenres = document.getElementById("movieGenres");
-  const movieYear = document.getElementById("movieYear");
-  const movieDuration = document.getElementById("movieDuration");
-  const movieBudget = document.getElementById("movieBudget");
-  const movieRevenue = document.getElementById("movieRevenue");
+  const dropdownDetails = document.getElementById("dropdownDetails");
   const offcanvasElement = document.getElementById("offcanvasInfo");
 
   // Función para mostrar las estrellas según el rating
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       listItem.innerHTML = `
         <h5>${pelicula.title}</h5>
-        <p>${pelicula.tagline}</p>
+        <p>${pelicula.tagline || "Sin tagline disponible"}</p>
         <div>${generateStars(pelicula.vote_average)}</div>
       `;
 
@@ -49,32 +49,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-// Filtra y muestra las películas que coinciden con la búsqueda
-btnBuscar.addEventListener("click", () => {
-  const searchText = inputBuscar.value.trim().toLowerCase();
-  if (searchText) {
-    const filteredMovies = moviesData.filter(movie => {
-      return (
-        movie.title.toLowerCase().includes(searchText) ||
-        movie.genres.some(genre => genre.name.toLowerCase().includes(searchText)) ||
-        (movie.tagline && movie.tagline.toLowerCase().includes(searchText)) ||
-        (movie.overview && movie.overview.toLowerCase().includes(searchText))
-      );
-    });
-    mostrarPeliculas(filteredMovies);
-  }
+  // Filtra y muestra las películas que coinciden con la búsqueda
+  btnBuscar.addEventListener("click", () => {
+    const searchText = inputBuscar.value.trim().toLowerCase();
+    if (searchText && moviesData.length) { // Verifica que moviesData tenga contenido
+      const filteredMovies = moviesData.filter(movie => {
+        return (
+          movie.title.toLowerCase().includes(searchText) ||
+          movie.genres.some(genre => genre.name.toLowerCase().includes(searchText)) ||
+          (movie.tagline && movie.tagline.toLowerCase().includes(searchText)) ||
+          (movie.overview && movie.overview.toLowerCase().includes(searchText))
+        );
+      });
+      mostrarPeliculas(filteredMovies);
+    }
+  });
+
+  // Función para mostrar los detalles de una película en el Offcanvas
+  const mostrarDetalles = (pelicula) => {
+    movieTitle.textContent = pelicula.title;
+    movieOverview.textContent = pelicula.overview;
+    movieGenres.textContent = pelicula.genres.map(genre => genre.name).join(", ");
+    
+    // Genera detalles adicionales en el dropdown
+    dropdownDetails.innerHTML = `
+      <li>Año de lanzamiento: ${pelicula.release_date.split("-")[0]}</li>
+      <li>Duración: ${pelicula.runtime} min</li>
+      <li>Presupuesto: $${pelicula.budget.toLocaleString()}</li>
+      <li>Ganancias: $${pelicula.revenue.toLocaleString()}</li>
+    `;
+
+    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+    offcanvas.show();
+  };
 });
-
-// Función para mostrar los detalles de una película en un Offcanvas
-const mostrarDetalles = (pelicula) => {
-  movieTitle.textContent = pelicula.title;
-  movieOverview.textContent = pelicula.overview;
-  movieGenres.textContent = pelicula.genres.map(genre => genre.name).join(", ");
-  movieYear.textContent = pelicula.release_date.split("-")[0];
-  movieDuration.textContent = pelicula.runtime;
-  movieBudget.textContent = pelicula.budget.toLocaleString();
-  movieRevenue.textContent = pelicula.revenue.toLocaleString();
-
-  const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-  offcanvas.show();
-};
