@@ -56,7 +56,7 @@ btnBuscar.addEventListener("click", () => {
     const filteredMovies = moviesData.filter(movie => {
       return (
         movie.title.toLowerCase().includes(searchText) ||
-        (movie.genres && movie.genres.some(genre => genre.name.toLowerCase().includes(searchText))) ||
+        movie.genres.some(genre => genre.name.toLowerCase().includes(searchText)) ||
         (movie.tagline && movie.tagline.toLowerCase().includes(searchText)) ||
         (movie.overview && movie.overview.toLowerCase().includes(searchText))
       );
@@ -65,17 +65,16 @@ btnBuscar.addEventListener("click", () => {
   }
 });
 
-  // Función para mostrar los detalles de una película en el Offcanvas
-  const mostrarDetalles = (pelicula) => {
-    movieTitle.textContent = pelicula.title;
-    movieOverview.textContent = pelicula.overview;
-    movieGenres.textContent = pelicula.genres.join(", ");
-    movieYear.textContent = pelicula.release_date.split("-")[0];
-    movieDuration.textContent = pelicula.runtime;
-    movieBudget.textContent = pelicula.budget.toLocaleString();
-    movieRevenue.textContent = pelicula.revenue.toLocaleString();
+// Función para mostrar los detalles de una película en un Offcanvas
+const mostrarDetalles = (pelicula) => {
+  movieTitle.textContent = pelicula.title;
+  movieOverview.textContent = pelicula.overview;
+  movieGenres.textContent = pelicula.genres.map(genre => genre.name).join(", ");
+  movieYear.textContent = pelicula.release_date.split("-")[0];
+  movieDuration.textContent = pelicula.runtime;
+  movieBudget.textContent = pelicula.budget.toLocaleString();
+  movieRevenue.textContent = pelicula.revenue.toLocaleString();
 
-    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-    offcanvas.show();
-  };
-});
+  const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+  offcanvas.show();
+};
