@@ -30,19 +30,19 @@
     </div>
   </main>
 
-  <!-- Offcanvas estático -->
-  <div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasInfo">
-    <div class="offcanvas-header">
-      <h5 id="offcanvasTitle"></h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <p id="offcanvasOverview"></p>
-      <ul id="offcanvasGenres" class="list-inline"></ul>
-      <button class="btn btn-secondary dropdown-toggle mt-2" id="movieDetailsBtn" data-bs-toggle="dropdown" aria-expanded="false">Más detalles</button>
-      <ul class="dropdown-menu" id="dropdownDetails"></ul>
-    </div>
+<!-- Offcanvas estático -->
+<div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasInfo">
+  <div class="offcanvas-header">
+    <h5 id="movieTitle"></h5> <!-- Cambia offcanvasTitle a movieTitle -->
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
+  <div class="offcanvas-body">
+    <p id="movieOverview"></p> <!-- Cambia offcanvasOverview a movieOverview -->
+    <ul id="movieGenres" class="list-inline"></ul> <!-- Cambia offcanvasGenres a movieGenres -->
+    <button class="btn btn-secondary dropdown-toggle mt-2" id="movieDetailsBtn" data-bs-toggle="dropdown" aria-expanded="false">Más detalles</button>
+    <ul class="dropdown-menu" id="dropdownDetails"></ul> <!-- Añade dropdownDetails -->
+  </div>
+</div>
 
   <footer class="text-muted py-3">
     <div class="container">
